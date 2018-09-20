@@ -1,0 +1,49 @@
+
+function dynamic_prompt {
+  local BLACK="\[\033[0;30m\]"
+  local BLACKBOLD="\[\033[1;30m\]"
+  local RED="\[\033[0;31m\]"
+  local REDBOLD="\[\033[1;31m\]"
+  local GREEN="\[\033[0;32m\]"
+  local GREENBOLD="\[\033[1;32m\]"
+  local YELLOW="\[\033[0;33m\]"
+  local YELLOW_BOLD="\[\033[1;33m\]"
+  local BLUE="\[\033[0;34m\]"
+  local BLUEBOLD="\[\033[1;34m\]"
+  local PURPLE="\[\033[0;35m\]"
+  local PURPLEBOLD="\[\033[1;35m\]"
+  local CYAN="\[\033[0;36m\]"
+  local CYAN_BOLD="\[\033[1;36m\]"
+  local WHITE="\[\033[0;37m\]"
+  local WHITE_BOLD="\[\033[1;37m\]"
+  local RESET_COLOR="\[\e[00m\]"
+
+  local RED_LIGHT_BOLD="\[\033[1;91m\]"
+  local GREEN_LIGHT_BOLD="\[\033[1;92m\]"
+
+  if [ -d ./.git ]; then
+    BRANCH=""`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+
+    REPO_NAME=`[ ! -z $(git config remote.origin.url) ] && git config remote.origin.url | cut -d\: -f2 | sed -e 's/\.git//' || echo local`
+
+    case $BRANCH in
+      master)
+        COLOR=$RED_LIGHT_BOLD
+        ;;
+      production)
+        COLOR=$YELLOW_BOLD
+        ;;
+      staging)
+        COLOR=$CYAN_BOLD
+        ;;
+      *)
+        COLOR=$GREEN_LIGHT_BOLD
+        ;;
+    esac
+
+    export PS1="\u@\h:\W [${COLOR}${BRANCH}${RESET_COLOR}${WHITE_BOLD}@${REPO_NAME}${RESET_COLOR}]\$ "
+  else
+    export PS1="\u@\h:\W\$ "
+  fi
+}
+export PROMPT_COMMAND="dynamic_prompt"
