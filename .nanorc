@@ -1,2 +1,59 @@
-set tabsize 2
-set tabstospaces
+set tabsize 2 # set tabulation size to 2 #cols
+set tabstospaces # set tabs to spaces when using indention
+set constantshow # enable status bar constantly
+ 
+set smooth # enable smooth scrolling
+set autoindent # enable indent alignment of new lines to previous ones
+set historylog # enable history for search/replaces
+set mouse # enable mouse support
+set atblanks # enable soft wrapping @ blank chars
+set cutfromcursor # enable cutting from cursor to end of line instead of whole line
+set linenumbers # enable line numbers to te left of text
+set numbercolor brightwhite,normal # set linenumber sidebar colors
+set positionlog # enable history of cursor position in files
+set rebinddelete # You should only need to use this option if Backspace acts like Delete on your system.
+set smarthome # enable jump to beginning of string of line if already at string's beginning
+set softwrap # enable long line soft wrapping
+set speller aspell # enable aspell for spell hecking
+set trimblanks # enable whitespace removing on hard-wrapping or text justifying
+set unix # enable unix as default save format
+set whitespace "·" # set whitespace character to middot (interpunct)
+
+#set morespace # remove blanc line on top of the editor
+set nohelp # disable help menu visibility
+set nowrap # disable long line wrapping
+
+
+# Backups
+set backup # enable file backup (~) on save
+set backupdir "~/.backups/nano" # place backup files in specific location
+
+# Syntax highlighting
+include /usr/local/share/nano/asm.nanorc
+include /usr/local/share/nano/awk.nanorc
+include /usr/local/share/nano/c.nanorc
+include /usr/local/share/nano/cmake.nanorc
+include /usr/local/share/nano/css.nanorc
+include /usr/local/share/nano/debian.nanorc
+include /usr/local/share/nano/fortran.nanorc
+include /usr/local/share/nano/gentoo.nanorc
+include /usr/local/share/nano/groff.nanorc
+include /usr/local/share/nano/html.nanorc
+include /usr/local/share/nano/java.nanorc
+include /usr/local/share/nano/makefile.nanorc
+include /usr/local/share/nano/man.nanorc
+include /usr/local/share/nano/mgp.nanorc
+include /usr/local/share/nano/mutt.nanorc
+include /usr/local/share/nano/nanorc.nanorc
+include /usr/local/share/nano/objc.nanorc
+include /usr/local/share/nano/ocaml.nanorc
+include /usr/local/share/nano/patch.nanorc
+include /usr/local/share/nano/perl.nanorc
+include /usr/local/share/nano/php.nanorc
+include /usr/local/share/nano/pov.nanorc
+include /usr/local/share/nano/python.nanorc
+include /usr/local/share/nano/ruby.nanorc
+include /usr/local/share/nano/sh.nanorc
+include /usr/local/share/nano/tcl.nanorc
+include /usr/local/share/nano/tex.nanorc
+include /usr/local/share/nano/xml.nanorc

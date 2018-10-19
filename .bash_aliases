@@ -49,8 +49,8 @@ alias reload-bash-profile='source ~/.bash_profile'
 # GIT
 alias mgit-log='git log --oneline -n 10'
 __git_complete mgit-log=- _git_log
-alias mgit-log-decorate='git log --oneline --graph --decorate'
-alias mgit-log-decorate-all='git log --oneline --graph --decorate --all'
+alias mgit-log-decorate='git log --oneline --graph --decorate -n 20'
+alias mgit-log-decorate-all='git log --oneline --graph --decorate --all -n 30'
 alias mgit-status='git status'
 alias mgit-fetch='git fetch -p --tags'
 alias mgit-checkout='git checkout'
@@ -72,6 +72,8 @@ alias prails-db-migrate-status='bundle exec bin/rails db:migrate:status'
 alias prails-test='bundle exec bin/rails test'
 alias prails-test-controllers='bundle exec bin/rails test:controllers'
 alias prails-test-models='bundle exec bin/rails test:models'
+alias prails-log-test='tail -f log/test.log'
+alias prails-log-dev='tail -f log/development.log'
 
 # RAKE
 alias prake='bundle exec bin/rake'
@@ -87,3 +89,6 @@ alias pspec='bundle exec bin/rspec'
 # RB
 alias rb-git-pull='git fetch -p --tags && git pull && ./bin/install'
 
+# FMI lectures
+alias fmi-homework-test="rspec sample_spec.rb --require ./solution.rb --colour --format documentation"
+alias fmi-style-check="rubocop $@"
