@@ -1,7 +1,7 @@
 set tabsize 2 # set tabulation size to 2 #cols
 set tabstospaces # set tabs to spaces when using indention
 set constantshow # enable status bar constantly
- 
+
 set smooth # enable smooth scrolling
 set autoindent # enable indent alignment of new lines to previous ones
 set historylog # enable history for search/replaces
@@ -14,14 +14,15 @@ set positionlog # enable history of cursor position in files
 set rebinddelete # You should only need to use this option if Backspace acts like Delete on your system.
 set smarthome # enable jump to beginning of string of line if already at string's beginning
 set softwrap # enable long line soft wrapping
+set fill 72 # sets line wrapping at Nth col
 set speller aspell # enable aspell for spell hecking
 set trimblanks # enable whitespace removing on hard-wrapping or text justifying
 set unix # enable unix as default save format
-set whitespace "·" # set whitespace character to middot (interpunct)
+#set whitespace "·" # set whitespace character to middot (interpunct)
 
 #set morespace # remove blanc line on top of the editor
 set nohelp # disable help menu visibility
-set nowrap # disable long line wrapping
+#set nowrap # disable long line wrapping
 
 
 # Backups
