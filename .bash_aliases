@@ -45,12 +45,14 @@ alias cd-dev-ex-rails='cd ~/Development/ruby/examples/depot'
 alias my-alias-list='echo "$DEFINED_ALIASES"'
 alias reload-aliases="source ${BASH_SOURCE[0]}"
 alias reload-bash-profile='source ~/.bash_profile'
+alias grep='grep --color=always'
+alias ls='ls -laFG'
 
 # GIT
 alias mgit-log='git log --oneline -n 10'
-__git_complete mgit-log=- _git_log
 alias mgit-log-decorate='git log --oneline --graph --decorate -n 20'
 alias mgit-log-decorate-all='git log --oneline --graph --decorate --all -n 30'
+alias mgit-log-decorate-shiny='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
 alias mgit-status='git status'
 alias mgit-fetch='git fetch -p --tags'
 alias mgit-checkout='git checkout'
@@ -84,7 +86,7 @@ alias prake-test-models='bundle exec bin/rake test:models'
 alias prake-spec='bundle exec bin/rails spec'
 
 # RSPEC
-alias pspec='bundle exec bin/rspec'
+alias prspec='bundle exec bin/rspec'
 
 # RB
 alias rb-git-pull='git fetch -p --tags && git pull && ./bin/install'
@@ -92,3 +94,8 @@ alias rb-git-pull='git fetch -p --tags && git pull && ./bin/install'
 # FMI lectures
 alias fmi-homework-test="rspec sample_spec.rb --require ./solution.rb --colour --format documentation"
 alias fmi-style-check="rubocop $@"
+
+# PUMA Server
+alias puma-restart='pkill -USR1 puma-dev'
+alias puma-link-app="puma-dev link -n $1 $2"
+alias puma-set-idle-timeout="puma-dev -install -timeout $1"
