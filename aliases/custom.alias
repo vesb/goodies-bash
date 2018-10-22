@@ -1,0 +1,4 @@
+
+# FMI lectures
+alias fmi-homework-test="rspec sample_spec.rb --require ./solution.rb --colour --format documentation"
+alias fmi-style-check="rubocop $@"

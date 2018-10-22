@@ -1,0 +1,2 @@
+# RB
+alias rb-git-pull='git fetch -p --tags && git pull && ./bin/install'

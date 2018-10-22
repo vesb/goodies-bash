@@ -1,0 +1,2 @@
+# RSPEC
+alias prspec='bundle exec bin/rspec'
