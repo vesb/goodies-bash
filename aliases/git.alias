@@ -1,0 +1,15 @@
+
+# GIT
+alias mgit-log='git log --oneline -n 10'
+alias mgit-log-decorate='git log --oneline --graph --decorate -n 20'
+alias mgit-log-decorate-all='git log --oneline --graph --decorate --all -n 30'
+alias mgit-log-decorate-shiny='git log --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+alias mgit-status='git status'
+alias mgit-fetch='git fetch -p --tags'
+alias mgit-checkout='git checkout'
+alias mgit-rebase='git rebase'
+alias mgit-rebase-i='git rebase -i'
+alias mgit-commit='git commit'
+alias mgit-commit-amend='git commit --amend'
+alias mgit-merge-no-ff='git merge --no-ff'
+alias mgit-merge-ff-only='git merge --ff-only'

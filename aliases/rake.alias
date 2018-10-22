@@ -1,0 +1,8 @@
+
+# RAKE
+alias prake='bundle exec bin/rake'
+alias prake-test='bundle exec bin/rake test'
+alias prake-test-controllers='bundle exec bin/rake test:controllers'
+alias prake-test-models='bundle exec bin/rake test:models'
+
+alias prake-spec='bundle exec bin/rails spec'

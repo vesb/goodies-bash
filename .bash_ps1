@@ -62,7 +62,15 @@ function __git_ps_custom() {
 }
 
 function __rbenv_ps_custom() {
-  [[ `rbenv version | grep -c '.ruby-version'` -gt 0 ]] && echo " (${YELLOW_BOLD}ruby_`rbenv version-name`${RESET_COLOR})"
+  if [[ `rbenv version 2>/dev/null | grep -c '.ruby-version'` -gt 0 ]]; then
+    local RB_VERSION=`rbenv version-name 2>/dev/null`
+    if [[ -z "$RB_VERSION" ]]; then
+      RB_VERSION="`rbenv version-name 2>&1 | ggrep -oP '\d+\.\d+\.\d+'`-missing"
+      [[ -z "$RB_VERSION" ]] && RB_VERSION='unknown'
+    fi
+    echo " (${YELLOW_BOLD}ruby_${RB_VERSION}${RESET_COLOR})"
+  fi
+
 }
 
 function __virtualenv_ps_custom() {
@@ -79,11 +87,16 @@ function __virtualenv_ps_custom() {
 }
 
 function __pyenv_ps_custom() {
-  if [[ `pyenv version | grep -c '.python-version'` -gt 0 ]]; then
-    PYENV_VERSION="${YELLOW_BOLD}python-`pyenv version-name`${RESET_COLOR}"
-  elif [[ ! -z "$VIRTUAL_ENV" ]]; then
+  local PYTHON_VERSION
+  if [[ ! -z "$VIRTUAL_ENV" ]]; then
     local PYTHON_VERSION=`${VIRTUAL_ENV}/bin/python --version | tr '[:upper:]' '[:lower:]'`
-    PYENV_VERSION="${YELLOW_BOLD}${PYTHON_VERSION//[[:space:]]/_}${RESET_COLOR}"
+    PYENV_VERSION="${YELLOW_BOLD}venv-${PYTHON_VERSION//[[:space:]]/_}${RESET_COLOR}"
+  elif [[ `pyenv version 2>&1 | grep -c '.python-version'` -gt 0 ]]; then
+    PYTHON_VERSION=`pyenv version-name 2>/dev/null`
+    if [ -z "$PYTHON_VERSION" ]; then
+      PYTHON_VERSION="`pyenv local`-missing"
+    fi
+    PYENV_VERSION="${YELLOW_BOLD}python_${PYTHON_VERSION}${RESET_COLOR}"
   fi
 
   [[ -n $PYENV_VERSION ]] && echo " ($PYENV_VERSION)"

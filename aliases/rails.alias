@@ -1,0 +1,14 @@
+
+# RAILS
+alias prails='bundle exec bin/rails'
+alias prails-gen-scaff='bundle exec bin/rails generate scaffold'
+alias prails-gen-migration='bundle exec bin/rails generate migration'
+alias prails-gen-channel='bundle exec bin/rails generate channel'
+alias prails-db-migrate='bundle exec bin/rails db:migrate'
+alias prails-db-rollback='bundle exec bin/rails db:rollback'
+alias prails-db-migrate-status='bundle exec bin/rails db:migrate:status'
+alias prails-test='bundle exec bin/rails test'
+alias prails-test-controllers='bundle exec bin/rails test:controllers'
+alias prails-test-models='bundle exec bin/rails test:models'
+alias prails-log-test='tail -f log/test.log'
+alias prails-log-dev='tail -f log/development.log'

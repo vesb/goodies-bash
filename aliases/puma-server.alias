@@ -1,0 +1,5 @@
+
+# PUMA Server
+alias puma-restart='pkill -USR1 puma-dev'
+alias puma-link-app="puma-dev link -n $1 $2"
+alias puma-set-idle-timeout="puma-dev -install -timeout $1"

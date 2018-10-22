@@ -1,0 +1,25 @@
+alias venv_pv=__create_python_virtualenv_with_specific_python_version
+
+function __create_python_virtualenv_with_specific_python_version() {
+  local IS_VENV_AVAILABLE=1
+  [[ `virtualenv 2>&1 | grep -c 'pyenv: virtualenv: command not found'` -gt 0 ]] && IS_VENV_AVAILABLE=0
+  [[ $IS_VENV_AVAILABLE -eq 0 ]] && echo 'Current python has no virtualenv' && return
+  python --version >/dev/null 2>&1
+  [[ $? -gt 0 ]] && echo 'Python version not supported/installed' && return
+
+  local VENV_NAME=${1:-pte}
+
+  local PYTHON_VERSION="${2}"
+  if [[ -z "$PYTHON_VERSION" ]]; then
+    PYTHON_VERSION="`python --version 2>&1 | awk '{print $NF}'`"
+  fi
+  ORIGINAL_PYTHON_VERSION=$PYTHON_VERSION
+
+  PYTHON_VERSION="`echo \"$PYTHON_VERSION\" | sed 's@[./\\]@_@g'`"
+  VENV_NAME="${VENV_NAME}${PYTHON_VERSION}"
+
+  local PYTHON_BIN_PATH="~/.pyenv/versions/${ORIGINAL_PYTHON_VERSION}/bin/python"
+  [[ ! -x "$PYTHON_BIN_PATH" ]] && PYTHON_BIN_PATH=$(which python)
+
+  virtualenv --python=$PYTHON_BIN_PATH $VENV_NAME
+}
