@@ -1,11 +1,6 @@
+ALIASES_PATH=`dirname ${BASH_SOURCE[0]}`
 
-function load_alias_file() {
-  local ALIAS_FILE_PATH="${CURRENT_PATH}/aliases/$1"
-  [[ -z "$1" || ! -f "$ALIAS_FILE_PATH" ]] && echo 'Could not load alias' && return
-  source "$ALIAS_FILE_PATH"
-}
-
-DEFINED_ALIASES="`grep -E '^alias' ${BASH_SOURCE[0]} | cut -d\  -f2 | cut -d\= -f1`"
+DEFINED_ALIASES="`grep -E '^alias' ${ALIASES_PATH}/* | cut -d\  -f2 | cut -d\= -f1`"
 function make-completion-wrapper () {
   local function_name="$2"
   local arg_count=$(($#-3))
@@ -22,21 +17,32 @@ function make-completion-wrapper () {
   #echo $function_name
   #echo "$function"
 }
+
 for ALIAS in $DEFINED_ALIASES; do
   case $ALIAS in
-    mgit-*)
-      GIT_COMPLETE_FUNC=`grep "alias $ALIAS=" ${BASH_SOURCE[0]} | cut -d\= -f2 | cut -d\' -f2 | awk '{print "_"$1"_"$2}'`
+    mg*)
+      GIT_COMPLETE_FUNC=`grep "alias $ALIAS=" ${ALIASES_PATH}/* | cut -d\= -f2 | cut -d\' -f2 | awk '{print "_"$1"_"$2}'`
+      case $GIT_COMPLETE_FUNC in
+        __mygit*)
+          GIT_COMMAND=`echo "$GIT_COMPLETE_FUNC" | cut -d\_ -f4`
+          GIT_COMPLETE_FUNC="_git_$GIT_COMMAND"
+          ;;
+
+        *)
+          ;;
+      esac
+
       __git_complete $ALIAS $GIT_COMPLETE_FUNC
       ;;
     prails-*)
-      RAILS_COMMAND=`grep "alias $ALIAS=" ${BASH_SOURCE[0]} | cut -d\= -f2 | cut -d\' -f2 |\
+      RAILS_COMMAND=`grep "alias $ALIAS=" ${ALIASES_PATH}/* | cut -d\= -f2 | cut -d\' -f2 |\
                      sed -E 's/(\-+[[:alpha:]]+)//g' | sed -E 's/[[:space:]]+$//g' |\
                      cut -d\  -f3-4 | cut -d\/ -f2`
       make-completion-wrapper __rails _$ALIAS $RAILS_COMMAND
       eval `complete -p rails | sed "s/_rails/$ALIAS/g" | sed "s/ rails/ $ALIAS/"`
       ;;
     prake-*)
-      RAKE_COMMAND=`grep "alias $ALIAS=" ${BASH_SOURCE[0]} | cut -d\= -f2 | cut -d\' -f2 |\
+      RAKE_COMMAND=`grep "alias $ALIAS=" ${ALIASES_PATH}/* | cut -d\= -f2 | cut -d\' -f2 |\
                      sed -E 's/(\-+[[:alpha:]]+)//g' | sed -E 's/[[:space:]]+$//g' |\
                      cut -d\  -f3-4 | cut -d\/ -f2`
       make-completion-wrapper _rakecomplete _$ALIAS $RAKE_COMMAND

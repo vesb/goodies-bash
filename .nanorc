@@ -22,7 +22,7 @@ set unix # enable unix as default save format
 
 #set morespace # remove blanc line on top of the editor
 set nohelp # disable help menu visibility
-#set nowrap # disable long line wrapping
+set nowrap # disable long line wrapping
 
 
 # Backups

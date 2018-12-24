@@ -1,0 +1,61 @@
+function __mygit_helper_target_branch()
+{
+  local BRANCH
+  case $1 in
+    [mM])
+      BRANCH=master
+      ;;
+
+    [pP])
+      BRANCH=production
+      ;;
+
+    [sS])
+      BRANCH=staging
+      ;;
+
+    [last])
+      [ -z "$MGIT_PREV_BRANCH" ] && echo 'No previous branch recorded' && return 0
+      BRANCH=$MGIT_PREV_BRANCH
+      ;;
+
+    *)
+      [ -z "$1" ] && BRANCH=`git rev-parse --abbrev-ref HEAD` || BRANCH="$1"
+      ;;
+  esac
+
+  export MGIT_PREV_BRANCH=`git rev-parse --abbrev-ref HEAD`
+  export MGIT_TARGET_BRANCH="$BRANCH"
+}
+
+function __mygit_current_branch()
+{
+  echo `git rev-parse --abbrev-ref HEAD`
+}
+
+function _mygit_checkout()
+{
+  [ -z "$1" ] && echo 'No branch/shortcut given!' && return 0
+
+  __mygit_helper_target_branch $1
+  [ -z "$MGIT_TARGET_BRANCH" ] || git checkout "$MGIT_TARGET_BRANCH" >/dev/null 2>&1
+}
+
+function _mygit_pull_branch()
+{
+  [ -z "$1" ] || _mygit_checkout "$1"
+  _mygit_fetch_pull
+  [ -z "$1" ] || _mygit_checkout l
+}
+
+function _mygit_fetch_pull()
+{
+  git fetch -p --tags && git pull
+}
+
+function _mygit_diff_with_remote()
+{
+  local CURRENT_BRANCH=`__mygit_current_branch`
+
+  git diff origin/${CURRENT_BRANCH}..${CURRENT_BRANCH}
+}
