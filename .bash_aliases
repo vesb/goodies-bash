@@ -1,5 +1,11 @@
 CURRENT_PATH=$(dirname `grealpath $BASH_SOURCE`)
-source "${CURRENT_PATH}/aliases/completion.alias"
+
+function load_alias_file() {
+  local ALIAS_FILE_PATH="${CURRENT_PATH}/aliases/$1"
+  [[ -z "$1" || ! -f "$ALIAS_FILE_PATH" ]] && echo "Could not load alias '$1'" && return
+  shift
+  source "$ALIAS_FILE_PATH"
+}
 
 load_alias_file general.alias
 load_alias_file git.alias
@@ -11,3 +17,5 @@ load_alias_file puma-server.alias
 load_alias_file python-venv.alias
 
 load_alias_file custom.alias
+
+source "${CURRENT_PATH}/aliases/completion.alias"

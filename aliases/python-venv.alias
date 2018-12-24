@@ -22,4 +22,5 @@ function __create_python_virtualenv_with_specific_python_version() {
   [[ ! -x "$PYTHON_BIN_PATH" ]] && PYTHON_BIN_PATH=$(which python)
 
   virtualenv --python=$PYTHON_BIN_PATH $VENV_NAME
+  virtualenv --relocatable $VENV_NAME
 }

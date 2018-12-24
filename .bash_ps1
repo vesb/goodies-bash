@@ -1,9 +1,16 @@
+BRANCH_SYNC_LABEL='sync'
+BRANCH_SYNC_AHEAD_LABEL='ahead:'
+BRANCH_SYNC_BEHIND_LABEL='behind:'
+
+STAGED_FILES_LABEL='staged:'
+TRACKED_NOT_STAGED_FILES_LABEL='modified:'
+UNTRACKED_FILES_LABEL='untracked:'
 
 function dynamic_prompt {
   local BLACK="\[\033[0;30m\]"
-  local BLACKBOLD="\[\033[1;30m\]"
+  local BLACK_BOLD="\[\033[1;30m\]"
   local RED="\[\033[0;31m\]"
-  local REDBOLD="\[\033[1;31m\]"
+  local RED_BOLD="\[\033[1;31m\]"
   local GREEN="\[\033[0;32m\]"
   local GREEN_BOLD="\[\033[1;32m\]"
   local YELLOW="\[\033[0;33m\]"
@@ -11,7 +18,7 @@ function dynamic_prompt {
   local BLUE="\[\033[0;34m\]"
   local BLUE_BOLD="\[\033[1;34m\]"
   local PURPLE="\[\033[0;35m\]"
-  local PURPLEBOLD="\[\033[1;35m\]"
+  local PURPLE_BOLD="\[\033[1;35m\]"
   local CYAN="\[\033[0;36m\]"
   local CYAN_BOLD="\[\033[1;36m\]"
   local WHITE="\[\033[0;37m\]"
@@ -29,16 +36,33 @@ function dynamic_prompt {
   local PYENV_PS=`__pyenv_ps_custom`
 
   PS1="${PYENV_PS}${RBENV_PS}${VENV_PS}${GIT_PS}${DEFAULT_PS1}"
-  [ "$DEFAULT_PS1" != "$PS1" ] && PS1="---${PS1}"
+  [ "$DEFAULT_PS1" != "$PS1" ] && PS1="\n---${PS1}"
 
+  export CURRENT_REPO_NAME=`__git_repo_name`
   export PS1="${PS1}\$ "
 }
 
-function __git_ps_custom() {
-  if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
-    local BRANCH=""`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+function __is_in_git_repo()
+{
+  git rev-parse --is-inside-work-tree &>/dev/null;
+  echo "${?}"
+}
 
-    local REPO_NAME=`[ ! -z $(git config remote.origin.url) ] && git config remote.origin.url | cut -d\: -f2 | sed -e 's/\.git//' || echo local`
+function __git_repo_name()
+{
+  if [ ! -z $(git config remote.origin.url) ]; then
+    echo `git config remote.origin.url | cut -d\: -f2 | sed -e 's/\.git//'`
+  else
+    echo local
+  fi
+}
+
+function __git_ps_custom() {
+  if [ `__is_in_git_repo` == '0' ]; then
+    #local BRANCH="`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`"
+    local BRANCH="`git rev-parse --abbrev-ref HEAD`"
+
+    local REPO_NAME=`__git_repo_name`
 
     local COLOR=''
     case $BRANCH in
@@ -56,8 +80,66 @@ function __git_ps_custom() {
         ;;
     esac
 
+    local BRANCH_SYNC_STATUS
+    if [[ `git branch -a | grep "remotes/origin/${BRANCH}" | wc -l` -gt 0 ]]; then
+      local COMMITS_AHEAD=`git rev-list --count origin/${BRANCH}..${BRANCH}`
+      local COMMITS_BEHIND=`git rev-list --count ${BRANCH}..origin/${BRANCH}`
+
+      local IS_AHEAD=0
+      [ $COMMITS_AHEAD -gt 0 ] && IS_AHEAD=1
+      local IS_BEHIND=0
+      [ $COMMITS_BEHIND -gt 0 ] && IS_BEHIND=1
+
+      local IS_DIVERGED=0
+      [[ $IS_AHEAD -eq 1 && $IS_BEHIND -eq 1 ]] && IS_DIVERGED=1
+
+      if [ $IS_DIVERGED -eq 1 ]; then
+        BRANCH_SYNC_STATUS="(${PURPLE_BOLD}${BRANCH_SYNC_LABEL}"
+        BRANCH_SYNC_STATUS="${BRANCH_SYNC_STATUS}${RESET_COLOR}|${GREEN_BOLD}${BRANCH_SYNC_AHEAD_LABEL}${COMMITS_AHEAD}${RESET_COLOR}"
+        BRANCH_SYNC_STATUS="${BRANCH_SYNC_STATUS}|${RED_BOLD}${BRANCH_SYNC_BEHIND_LABEL}${COMMITS_BEHIND}${RESET_COLOR}) "
+      else
+        [ $IS_AHEAD -eq 1 ] && BRANCH_SYNC_STATUS="(${GREEN_BOLD}${BRANCH_SYNC_AHEAD_LABEL}${COMMITS_AHEAD}${RESET_COLOR}) "
+        [ $IS_BEHIND -eq 1 ] && BRANCH_SYNC_STATUS="(${RED_BOLD}${BRANCH_SYNC_BEHIND_LABEL}${COMMITS_BEHIND}${RESET_COLOR}) "
+      fi
+    else
+      BRANCH_SYNC_STATUS="(${BLUE_BOLD}no-remote${RESET_COLOR}) "
+    fi
+
+    local BRANCH_STAGING_STATUS
+    local STAGED_FILES_COUNT=`git diff --staged --name-only | wc -l | tr -d '[:space:]'`
+    if [ $STAGED_FILES_COUNT -gt 0 ]; then
+      BRANCH_STAGING_STATUS="${GREEN}${STAGED_FILES_LABEL}${STAGED_FILES_COUNT}${RESET_COLOR}"
+    fi
+
+    local BRANCH_TRACKED_NOT_STAGED_STATUS
+    local TRACKED_NOT_STAGED_FILES_COUNT=`git ls-files . --modified | wc -l | tr -d '[:space:]'`
+    if [ $TRACKED_NOT_STAGED_FILES_COUNT -gt 0 ]; then
+      BRANCH_TRACKED_NOT_STAGED_STATUS="${YELLOW}${TRACKED_NOT_STAGED_FILES_LABEL}${TRACKED_NOT_STAGED_FILES_COUNT}${RESET_COLOR}"
+    fi
+
+    local BRANCH_UNTRACKED_STATUS
+    local UNTRACKED_FILES_COUNT=`git ls-files . --exclude-standard --others | wc -l | tr -d '[:space:]'`
+    if [ $UNTRACKED_FILES_COUNT -gt 0 ]; then
+      BRANCH_UNTRACKED_STATUS="${BLACK_BOLD}${UNTRACKED_FILES_LABEL}${UNTRACKED_FILES_COUNT}${RESET_COLOR}"
+    fi
+
+    local BRANCH_STATUS
+    if [ ! -z "$BRANCH_STAGING_STATUS" ]; then
+      BRANCH_STATUS=$BRANCH_STAGING_STATUS
+    fi
+    if [ ! -z "$BRANCH_TRACKED_NOT_STAGED_STATUS" ]; then
+      [ ! -z "$BRANCH_STATUS" ] && BRANCH_STATUS="${BRANCH_STATUS}|"
+      BRANCH_STATUS="${BRANCH_STATUS}${BRANCH_TRACKED_NOT_STAGED_STATUS}"
+    fi
+    if [ ! -z "$BRANCH_UNTRACKED_STATUS" ]; then
+      [ ! -z "$BRANCH_STATUS" ] && BRANCH_STATUS="${BRANCH_STATUS}|"
+      BRANCH_STATUS="${BRANCH_STATUS}${BRANCH_UNTRACKED_STATUS}"
+    fi
+
+    [ ! -z "$BRANCH_STATUS" ] && BRANCH_STATUS="|$BRANCH_STATUS| "
+
     # PS1="---${PS1}[${COLOR}${BRANCH}${RESET_COLOR}${WHITE_BOLD}@${REPO_NAME}${RESET_COLOR}]\n"
-    echo " [${COLOR}${BRANCH}${RESET_COLOR}${WHITE_BOLD}@${REPO_NAME}${RESET_COLOR}]"
+    echo " [${BRANCH_STATUS}${BRANCH_SYNC_STATUS}${COLOR}${BRANCH}${RESET_COLOR}${WHITE_BOLD}@${REPO_NAME}${RESET_COLOR}]"
   fi
 }
 

@@ -20,10 +20,9 @@ source ~/bin/goodies/.bash_ps1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # bash_history related
-source ~/bin/goodies/.bash_history_clean
-source ~/bin/goodies/.bash_history_shared
+# source ~/bin/goodies/.bash_history_clean
+#source ~/bin/goodies/.bash_history_shared
 
 # editor
 [ ! -L ~/.nanorc ] && ln -s ~/bin/goodies/.nanorc ~/.nanorc
 export EDITOR=nano
-
