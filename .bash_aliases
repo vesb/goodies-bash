@@ -1,4 +1,4 @@
-CURRENT_PATH=$(dirname `grealpath $BASH_SOURCE`)
+CURRENT_PATH=$(dirname `realpath $BASH_SOURCE`)
 
 function load_alias_file() {
   local ALIAS_FILE_PATH="${CURRENT_PATH}/aliases/$1"

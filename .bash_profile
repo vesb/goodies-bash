@@ -1,20 +1,19 @@
-export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/10/bin:~/bin"
+export PATH="$PATH:~/.bin"
+
+export GOODIES_BASH_PATH=~/.bin/goodies-bash
 
 # Ruby ENV related
-eval "$(rbenv init -)"
+which rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 
 # Python ENV related
-eval "$(pyenv init -)"
+which pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
+which pyenv >/dev/null 2>&1 && eval "$(pyenv virtualenv-init -)"
 
-# Goodies
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
-test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
-
-source ~/bin/goodies/.bash_completion_extra
-source ~/bin/goodies/.bash_aliases
+source "${GOODIES_BASH_PATH}/.bash_completion_extra"
+source "${GOODIES_BASH_PATH}/.bash_aliases"
 
 # Prompt related
-source ~/bin/goodies/.bash_ps1
+source "${GOODIES_BASH_PATH}/.bash_ps1"
 
 # Terminal related
 export LSCOLORS=GxFxCxDxBxegedabagaced
@@ -24,5 +23,5 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 #source ~/bin/goodies/.bash_history_shared
 
 # editor
-[ ! -L ~/.nanorc ] && ln -s ~/bin/goodies/.nanorc ~/.nanorc
+[ ! -L ~/.nanorc ] && ln -s "${GOODIES_BASH_PATH}/.nanorc" ~/.nanorc
 export EDITOR=nano
