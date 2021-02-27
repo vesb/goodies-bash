@@ -1,5 +1,7 @@
 ALIASES_PATH=`dirname ${BASH_SOURCE[0]}`
 
+source "${ALIASES_PATH}/git-original.alias"
+
 DEFINED_ALIASES="`grep -E '^alias' ${ALIASES_PATH}/* | cut -d\  -f2 | cut -d\= -f1`"
 function make-completion-wrapper () {
   local function_name="$2"
@@ -32,7 +34,7 @@ for ALIAS in $DEFINED_ALIASES; do
           ;;
       esac
 
-      complete -o bashdefault -o default -o nospace -F "$ALIAS" __git_wrap__git_main
+      __git_complete "$ALIAS" $GIT_COMPLETE_FUNC
       ;;
     prails-*)
       which rails >/dev/null 2>&1 && (

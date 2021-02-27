@@ -5,7 +5,7 @@ set constantshow # enable status bar constantly
 set smooth # enable smooth scrolling
 set autoindent # enable indent alignment of new lines to previous ones
 set historylog # enable history for search/replaces
-set mouse # enable mouse support
+#set mouse # enable mouse support
 set atblanks # enable soft wrapping @ blank chars
 set cutfromcursor # enable cutting from cursor to end of line instead of whole line
 set linenumbers # enable line numbers to te left of text
