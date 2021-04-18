@@ -54,6 +54,13 @@ for ALIAS in $DEFINED_ALIASES; do
         eval `complete -p rake | sed "s/rakecomplete/$ALIAS/g" | sed "s/ rake/ $ALIAS/"`
       )
       ;;
+
+    kubectl-env-*)
+      if ! declare -F __start_kubectl &>/dev/null; then
+        [ -f /usr/share/bash-completion/completions/kubectl ] && . /usr/share/bash-completion/completions/kubectl || . "${ALIASES_PATH}/kubectl-original.alias"
+      fi
+      complete -F __start_kubectl $ALIAS
+      ;;
   esac
 
 done

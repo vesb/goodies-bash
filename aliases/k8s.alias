@@ -1,0 +1,7 @@
+alias kubectl-env-staging="kubectl --kubeconfig=$HOME/.kube/config.testing -n staging"
+alias kubectl-env-qa="kubectl --kubeconfig=$HOME/.kube/config.testing -n qa"
+alias kubectl-env-debug="kubectl --kubeconfig=$HOME/.kube/config.testing -n debug"
+alias kubectl-testing="kubectl --kubeconfig=$HOME/.kube/config.testing"
+
+alias kubectl-prod="kubectl --kubeconfig=$HOME/.kube/config.prod"
+alias kubectl-env-prod="kubectl --kubeconfig=$HOME/.kube/config.prod -n production"

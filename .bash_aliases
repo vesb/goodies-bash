@@ -15,6 +15,7 @@ load_alias_file rspec.alias
 load_alias_file rb.alias
 load_alias_file puma-server.alias
 load_alias_file python-venv.alias
+load_alias_file k8s.alias
 
 load_alias_file custom.alias
 
