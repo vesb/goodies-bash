@@ -11,8 +11,10 @@ which pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
 which pyenv >/dev/null 2>&1 && eval "$(pyenv virtualenv-init -)"
 
 # Node.js ENV related
-export PATH="$HOME/.nodenv/bin:$PATH"
-which pyenv >/dev/null 2>&1 && eval "$(nodenv init -)"
+if [[ $(which nodenv >/dev/null 2>&1) ]]; then
+  export PATH="$HOME/.nodenv/bin:$PATH"
+  eval "$(nodenv init -)"
+fi
 
 source "${GOODIES_BASH_PATH}/.bash_completion_extra"
 source "${GOODIES_BASH_PATH}/.bash_aliases"
