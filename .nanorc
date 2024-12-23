@@ -2,7 +2,7 @@ set tabsize 2 # set tabulation size to 2 #cols
 set tabstospaces # set tabs to spaces when using indention
 set constantshow # enable status bar constantly
 
-set smooth # enable smooth scrolling
+##set smooth # enable smooth scrolling
 set autoindent # enable indent alignment of new lines to previous ones
 set historylog # enable history for search/replaces
 #set mouse # enable mouse support
@@ -18,9 +18,10 @@ set fill 72 # sets line wrapping at Nth col
 set speller aspell # enable aspell for spell hecking
 set trimblanks # enable whitespace removing on hard-wrapping or text justifying
 set unix # enable unix as default save format
-#set whitespace "·" # set whitespace character to middot (interpunct)
+set whitespace "··" # set whitespace character to middot (interpunct)
+set afterends # ctrl+right stops at word's end
 
-#set morespace # remove blanc line on top of the editor
+#set morespace # remove blank line on top of the editor
 set nohelp # disable help menu visibility
 set nowrap # disable long line wrapping
 
@@ -35,23 +36,23 @@ include /usr/share/nano/awk.nanorc
 include /usr/share/nano/c.nanorc
 include /usr/share/nano/cmake.nanorc
 include /usr/share/nano/css.nanorc
-include /usr/share/nano/debian.nanorc
-include /usr/share/nano/fortran.nanorc
-include /usr/share/nano/gentoo.nanorc
+#include /usr/share/nano/debian.nanorc
+#include /usr/share/nano/fortran.nanorc
+#include /usr/share/nano/gentoo.nanorc
 include /usr/share/nano/groff.nanorc
 include /usr/share/nano/html.nanorc
 include /usr/share/nano/java.nanorc
 include /usr/share/nano/makefile.nanorc
 include /usr/share/nano/man.nanorc
-include /usr/share/nano/mgp.nanorc
-include /usr/share/nano/mutt.nanorc
+#include /usr/share/nano/mgp.nanorc
+#include /usr/share/nano/mutt.nanorc
 include /usr/share/nano/nanorc.nanorc
 include /usr/share/nano/objc.nanorc
 include /usr/share/nano/ocaml.nanorc
 include /usr/share/nano/patch.nanorc
 include /usr/share/nano/perl.nanorc
 include /usr/share/nano/php.nanorc
-include /usr/share/nano/pov.nanorc
+#include /usr/share/nano/pov.nanorc
 include /usr/share/nano/python.nanorc
 include /usr/share/nano/ruby.nanorc
 include /usr/share/nano/sh.nanorc

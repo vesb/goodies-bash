@@ -7,7 +7,11 @@ export GOODIES_BASH_PATH=~/.bin/goodies-bash
 which rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 
 # Python ENV related
-which pyenv >/dev/null 2>&1 && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"
+if [[ -d "$HOME/.pyenv" ]]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  command -v pyenv >/dev/null && eval $(pyenv init --path) && eval "$(pyenv init -)" && eval "$(pyenv virtualenv-init -)"
+fi
 
 # Node.js ENV related
 if [[ $(which nodenv >/dev/null 2>&1) ]]; then
@@ -25,9 +29,12 @@ source "${GOODIES_BASH_PATH}/.bash_ps1"
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # bash_history related
-# source ~/bin/goodies/.bash_history_clean
-#source ~/bin/goodies/.bash_history_shared
+source "${GOODIES_BASH_PATH}/.bash_history_clean"
+#source "${GOODIES_BASH_PATH}/.bash_history_shared"
 
 # editor
 [ ! -L ~/.nanorc ] && ln -s "${GOODIES_BASH_PATH}/.nanorc" ~/.nanorc
 export EDITOR=nano
+
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+source "${GOODIES_BASH_PATH}/ssh-agent-autostart"

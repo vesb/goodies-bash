@@ -27,6 +27,8 @@ function dynamic_prompt {
 
   local RED_LIGHT_BOLD="\[\033[1;91m\]"
   local GREEN_LIGHT_BOLD="\[\033[1;92m\]"
+  local BLUE_LIGHT_BOLD="\[\033[1;94m\]"
+  local YELLOW_LIGHT_BOLD="\[\033[1;93m\]"
 
   DEFAULT_PS1="\n\u@\h:\W "
 
@@ -51,7 +53,7 @@ function __is_in_git_repo()
 function __git_repo_name()
 {
   if [ ! -z $(git config remote.origin.url) ]; then
-    echo `git config remote.origin.url | cut -d\: -f2 | sed -e 's/\.git//'`
+    echo `git config remote.origin.url 2>/dev/null | cut -d\: -f2 | sed -e 's/\.git//'`
   else
     echo local
   fi
@@ -60,7 +62,7 @@ function __git_repo_name()
 function __git_ps_custom() {
   if [ `__is_in_git_repo` == '0' ]; then
     #local BRANCH="`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`"
-    local BRANCH="`git rev-parse --abbrev-ref HEAD`"
+    local BRANCH="`git rev-parse --abbrev-ref HEAD 2>/dev/null`"
 
     local REPO_NAME=`__git_repo_name`
 
@@ -75,6 +77,9 @@ function __git_ps_custom() {
       staging)
         COLOR=$CYAN_BOLD
         ;;
+      qa)
+        COLOR=$YELLOW_LIGHT_BOLD
+        ;;
       *)
         COLOR=$GREEN_LIGHT_BOLD
         ;;
@@ -82,8 +87,8 @@ function __git_ps_custom() {
 
     local BRANCH_SYNC_STATUS
     if [[ `git branch -a | grep "remotes/origin/${BRANCH}" | wc -l` -gt 0 ]]; then
-      local COMMITS_AHEAD=`git rev-list --count origin/${BRANCH}..${BRANCH}`
-      local COMMITS_BEHIND=`git rev-list --count ${BRANCH}..origin/${BRANCH}`
+      local COMMITS_AHEAD=`git rev-list --count origin/${BRANCH}..${BRANCH} 2>/dev/null || echo 0`
+      local COMMITS_BEHIND=`git rev-list --count ${BRANCH}..origin/${BRANCH} 2>/dev/null || echo 0`
 
       local IS_AHEAD=0
       [ $COMMITS_AHEAD -gt 0 ] && IS_AHEAD=1
@@ -106,7 +111,7 @@ function __git_ps_custom() {
     fi
 
     local BRANCH_STAGING_STATUS
-    local STAGED_FILES_COUNT=`git diff --staged --name-only | wc -l | tr -d '[:space:]'`
+    local STAGED_FILES_COUNT=`git diff --staged --name-only 2>/dev/null | wc -l | tr -d '[:space:]'`
     if [ $STAGED_FILES_COUNT -gt 0 ]; then
       BRANCH_STAGING_STATUS="${GREEN}${STAGED_FILES_LABEL}${STAGED_FILES_COUNT}${RESET_COLOR}"
     fi
